@@ -1,0 +1,12 @@
+*.py[cod]
+__pycache__/
+
+build/
+dist/
+*.egg_info/
+.tox/
+
+static/output/*
+static/bookmarks.html
+static/web2pdf.db
+
