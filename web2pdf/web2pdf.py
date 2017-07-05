@@ -28,8 +28,10 @@ def main():
     input('Hit enter to start downloading pending PDFs')
     unsaved_links = link_db.get_unsaved_links()
     for link in unsaved_links:
-        result, errstring = download_pdf(link[0], link[1])
-        link_db.update_record(link[0], result, errstring)
+        result, errstring = download_pdf(link_db, link[0], link[1])
+        if not result:
+            print('Something went wrong with this one: {}'.format(
+                errstring))
 
 if __name__ == '__main__':
     main()

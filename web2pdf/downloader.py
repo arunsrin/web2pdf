@@ -12,18 +12,21 @@ LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.StreamHandler(sys.stdout))
 LOG.setLevel(logging.INFO)
 
-def download_pdf(link, title):
+def download_pdf(link_db, link, title):
     '''For an input 'link', fetch the URL and save it as a pdf to
-    OUTPUT_DIR.  Returns a tuple of (True, None) or (False,
-    exception-string) based on success/failure.
+    OUTPUT_DIR.  Updates the corresponding row in link_db accordingly.
 
     '''
     output_file = os.path.join(OUTPUT_DIR, title + '.pdf')
     LOG.info('Downloading %s | %s', link, title)
+    saved = 1
+    errstring = None
     try:
         pdfkit.from_url(link, output_file)
     except OSError as exc:
+        errstring = str(exc)
         LOG.info('Failed to download %s with error %s',
-                 link, str(exc))
-        return (False, str(exc))
-    return (True, None)
+                 link, errstring)
+        saved = 2
+    link_db.update_record(link, saved, errstring)
+    return (True, None) if not errstring else (False, errstring)
