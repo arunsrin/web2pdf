@@ -22,7 +22,8 @@ def download_pdf(link_db, link, title):
     saved = 1
     errstring = None
     try:
-        pdfkit.from_url(link, output_file)
+        pdfkit.from_url(link, output_file,
+                        options={'quiet': ''})
     except OSError as exc:
         errstring = str(exc)
         LOG.info('Failed to download %s with error %s',
